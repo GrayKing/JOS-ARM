@@ -44,8 +44,7 @@ $(OBJDIR)/kern/%.o: lib/%.c
 	$(V)$(CC) -nostdinc $(KERN_CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/kern/kernel: $(KERN_OBJFILES) $(KERN_BINFILES) kern/kernel.ld \
-	@echo + ld $@
-	$(V)$(CC) -o $@ $(KERN_LDFLAGS) $(KERN_OBJFILES) -lgcc 
+    $(V)$(CC) -o $@ $(KERN_LDFLAGS) $(KERN_OBJFILES) -lgcc 
 	$(V)$(OBJDUMP) -S $@ > $@.asm
 	$(V)$(NM) -n $@ > $@.sym
 
