@@ -6,7 +6,7 @@
 // makes some difference on real hardware,
 // but it makes an even bigger difference on bochs.
 // Primespipe runs 3x faster this way.
-#define ASM 1
+#define ASM 0
 
 int
 strlen(const char *s)
@@ -117,8 +117,9 @@ strfind(const char *s, char c)
 	return (char *) s;
 }
 
+// Since here only affects the efficiency, we replace all assembly code with C code
 #if ASM
-void *
+/*void *
 memset(void *v, int c, size_t n)
 {
 	char *p;
@@ -167,7 +168,7 @@ memmove(void *dst, const void *src, size_t n)
 	}
 	return dst;
 }
-
+*/
 #else
 
 void *

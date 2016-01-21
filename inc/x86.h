@@ -3,7 +3,7 @@
 
 #include <inc/types.h>
 
-/*
+
 static __inline void breakpoint(void) __attribute__((always_inline));
 static __inline uint8_t inb(int port) __attribute__((always_inline));
 static __inline void insb(int port, void *addr, int cnt) __attribute__((always_inline));
@@ -36,6 +36,7 @@ static __inline uint32_t read_esp(void) __attribute__((always_inline));
 static __inline void cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp);
 static __inline uint64_t read_tsc(void) __attribute__((always_inline));
 
+/*
 static __inline void
 breakpoint(void)
 {
