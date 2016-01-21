@@ -1,3 +1,5 @@
+#ifndef JOS_INC_ARM_H
+#define JOS_INC_ARM_H
 #if !defined(__cplusplus)
 #include <stdbool.h>
 #endif
@@ -132,18 +134,4 @@ void uart_puts(const char* str)
 	uart_write((const unsigned char*) str, strlen(str));
 }
  
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
-void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
-{
-	(void) r0;
-	(void) r1;
-	(void) atags;
- 
-	uart_init();
-	uart_puts("Hello, kernel World!\r\n");
- 
-	while ( true )
-		uart_putc(uart_getc());
-}
+#endif 

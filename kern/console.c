@@ -15,10 +15,14 @@ static void cons_putc(int c);
 static void
 delay(void)
 {
+
+	/// jtc : this delay now is removed on arms. 
+	/*
 	inb(0x84);
 	inb(0x84);
 	inb(0x84);
 	inb(0x84);
+	*/
 }
 
 /***** Serial I/O code *****/
@@ -78,6 +82,9 @@ serial_putc(int c)
 static void
 serial_init(void)
 {
+	/// jtc : using the support of "arm.h"	
+
+	/*
 	// Turn off the FIFO
 	outb(COM1+COM_FCR, 0);
 
@@ -99,7 +106,7 @@ serial_init(void)
 	serial_exists = (inb(COM1+COM_LSR) != 0xFF);
 	(void) inb(COM1+COM_IIR);
 	(void) inb(COM1+COM_RX);
-
+	*/
 }
 
 
