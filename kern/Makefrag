@@ -1,6 +1,6 @@
 OBJDIRS += kern
 
-KERN_LDFLAGS := $(LDFLAGS) -T kern/kernel.ld -nostdlib
+KERN_LDFLAGS := $(LDFLAGS) -T kern/kernel.ld -nostdlib -ffreestanding
 
 KERN_SRCFILES :=	kern/entry.S \
 			kern/entrypgdir.c \
@@ -43,8 +43,9 @@ $(OBJDIR)/kern/%.o: lib/%.c
 	@mkdir -p $(@D)
 	$(V)$(CC) -nostdinc $(KERN_CFLAGS) -c -o $@ $<
 
-$(OBJDIR)/kern/kernel: $(KERN_OBJFILES) $(KERN_BINFILES) kern/kernel.ld \
-    $(V)$(CC) -o $@ $(KERN_LDFLAGS) $(KERN_OBJFILES) -lgcc 
+$(OBJDIR)/kern/kernel: $(KERN_OBJFILES) kern/kernel.ld 
+	@echo + ld $@
+	$(V)$(CC) -o $@ $(KERN_LDFLAGS) $(KERN_OBJFILES) -lgcc 
 	$(V)$(OBJDUMP) -S $@ > $@.asm
 	$(V)$(NM) -n $@ > $@.sym
 
