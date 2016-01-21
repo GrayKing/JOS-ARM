@@ -1,7 +1,9 @@
 .section ".text.boot"
  
 .globl _start
-
+.global entry
+_start:
+entry:
 	mov r4, #0x80000000
 
 	/* SVC stack (for SWIs) at 0x2000 */
