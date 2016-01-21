@@ -3,6 +3,7 @@
 
 #include <inc/types.h>
 
+/*
 static __inline void breakpoint(void) __attribute__((always_inline));
 static __inline uint8_t inb(int port) __attribute__((always_inline));
 static __inline void insb(int port, void *addr, int cnt) __attribute__((always_inline));
@@ -292,5 +293,5 @@ xchg(volatile uint32_t *addr, uint32_t newval)
 			"cc");
 	return result;
 }
-
+*/
 #endif /* !JOS_INC_X86_H */
