@@ -8,7 +8,7 @@
 .global entry
 _start:
 entry:
-	mov r4, #0x8000
+	mov r4, #0x2400
 
 	/* SVC stack (for SWIs) at 0x2000 */
 	/* The processor appears to start in this mode, but change to it
