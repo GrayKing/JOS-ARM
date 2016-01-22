@@ -8,14 +8,14 @@
 .global entry
 _start:
 entry:
-	mov r4, #0x0
+	mov r4, #0x8000
 
 	/* SVC stack (for SWIs) at 0x2000 */
 	/* The processor appears to start in this mode, but change to it
 	 * anyway
 	 */
 	cps #0x13		/* Change to supervisor (SVC) mode */
-	mov sp, #0x8000
+	mov sp, r4
 
 	/* ABORT stack at 0x2400 */
 	cps #0x17		/* Change to Abort mode */
@@ -28,25 +28,6 @@ entry:
 	/* System stack at 0x2c00 */
 	cps #0x1f		/* Change to system mode */
 	add sp, r4, #0x3c00
-#	mov lr,#0 
-#	ldr r4, =__bss_start
-#	ldr r9, =__bss_end
-#	mov r5, #0
-#	mov r6, #0
-#	mov r7, #0
-#	mov r8, #0
-#	b       2f
- 
-#1:
-	// store multiple at r4.
-#	stmia r4!, {r5-r8}
- 
-	// If we are still below bss_end, loop.
-#2:
-#	cmp r4, r9
-#	blo 1b
-	
-	/* Stay in system mode from now on */
 
 	/* Turn on unaligned memory access */
 	mrc p15, #0, r4, c1, c0, #0
@@ -57,7 +38,6 @@ entry:
 	push {r0, r1, r2}
 	ldr r0, =0xFFFFFFFF // 0x11 for every domain represents the MANAGER
 	mcr p15, 0, r0, c3, c0, 0 //Set domain access permission
-			
 
 	ldr r3, = RELOC(entry_pgdir)   
 	mcr p15, 0, r3, c2, c0, 0
@@ -74,7 +54,4 @@ entry:
 	pop {r0,r1,r2}
 	blx  lr
 
-#err:
-#	ldr r0, #0
-#	ldr r1, #1
 		

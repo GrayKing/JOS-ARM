@@ -66,13 +66,10 @@ include kern/Makefrag
 QEMUOPTS = -kernel $(OBJDIR)/kern/kernel -cpu arm1176 -m 256 -M raspi -serial stdio -gdb tcp::$(GDBPORT) -D qemu.log
 IMAGES = $(OBJDIR)/kern/kernel
 
-.gdbinit: .gdbinit.tmpl
-	sed "s/localhost:1234/localhost:$(GDBPORT)/" < $^ > $@
-
 gdb:
-	arm-none-eabi-gdb -x .gdbinit
+	arm-none-eabi-gdb  
 
-pre-qemu: .gdbinit
+pre-qemu: 
 
 qemu: $(IMAGES) pre-qemu
 	$(QEMU) $(QEMUOPTS)
@@ -103,5 +100,5 @@ print-gdbport:
 
 # For deleting the build
 clean:
-	rm -rf $(OBJDIR) .gdbinit jos.in qemu.log
+	rm -rf $(OBJDIR) jos.in qemu.log
 
