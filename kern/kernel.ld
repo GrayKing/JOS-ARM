@@ -47,10 +47,12 @@ SECTIONS
 
 	PROVIDE(edata = .);
 
+	__bss_start = . ;
 	.bss : {
 		*(.bss)
 	}
-
+	. = ALIGN(0x1000);
+	__bss_end = . ; 
 	PROVIDE(end = .);
 
 	/DISCARD/ : {

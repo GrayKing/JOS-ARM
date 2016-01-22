@@ -1,17 +1,21 @@
 .section ".text.boot"
+#include <inc/mmu.h>
+#include <inc/memlayout.h>
+
+#define RELOC(x) ( (x) - KERNBASE ) 
  
 .globl _start
 .global entry
 _start:
 entry:
-	mov r4, #0x80000000
+	mov r4, #0x0
 
 	/* SVC stack (for SWIs) at 0x2000 */
 	/* The processor appears to start in this mode, but change to it
 	 * anyway
 	 */
 	cps #0x13		/* Change to supervisor (SVC) mode */
-	add sp, r4, #0x2400
+	mov sp, #0x8000
 
 	/* ABORT stack at 0x2400 */
 	cps #0x17		/* Change to Abort mode */
@@ -24,28 +28,53 @@ entry:
 	/* System stack at 0x2c00 */
 	cps #0x1f		/* Change to system mode */
 	add sp, r4, #0x3c00
-
+#	mov lr,#0 
+#	ldr r4, =__bss_start
+#	ldr r9, =__bss_end
+#	mov r5, #0
+#	mov r6, #0
+#	mov r7, #0
+#	mov r8, #0
+#	b       2f
+ 
+#1:
+	// store multiple at r4.
+#	stmia r4!, {r5-r8}
+ 
+	// If we are still below bss_end, loop.
+#2:
+#	cmp r4, r9
+#	blo 1b
+	
 	/* Stay in system mode from now on */
 
 	/* Turn on unaligned memory access */
 	mrc p15, #0, r4, c1, c0, #0
 	orr r4, #0x400000	/* 1<22 */
-	mcr p15, #0, r4, c1, c0, #0
+	mcr p15, #0, r4, c1, c0, #0 
 
 	/* Jump to memory map initialisation code */
 	push {r0, r1, r2}
-	ldr r3, =entry_pgdir   
-	mcr p15, #0, r3, c2, c0, #0
-        mcr p15, #0, r3, c2, c0, #1
+	ldr r0, =0xFFFFFFFF // 0x11 for every domain represents the MANAGER
+	mcr p15, 0, r0, c3, c0, 0 //Set domain access permission
+			
+
+	ldr r3, = RELOC(entry_pgdir)   
+	mcr p15, 0, r3, c2, c0, 0
+        mcr p15, 0, r3, c2, c0, 1
         mov r3,  #0 
-        mcr p15, #0, r3, c2, c0, #2 
-	mov r3,  #1
-	mcr p15, #0, r3, c3, c0, #0
-	mcr p15, #0, r3, c1, c0, #0
-	orr r3,  r3, #0x800000
+        mcr p15, 0, r3, c2, c0, 2 
+	#mov r3,  #1
+	#mcr p15, 0, r3, c3, c0, 0
+	mcr p15, 0, r3, c1, c0, 0
+#	orr r3,  r3, #0x800000
 	orr r3,  r3, #1
-	mcr p15, #0, r3, c1, c0, #0
+	mcr p15, 0, r3, c1, c0, 0
 	ldr lr,=arm_init
 	pop {r0,r1,r2}
-	bx  lr
+	blx  lr
+
+#err:
+#	ldr r0, #0
+#	ldr r1, #1
 		

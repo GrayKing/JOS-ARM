@@ -63,7 +63,7 @@ USER_CFLAGS := $(CFLAGS) -DJOS_USER -gstabs
 include kern/Makefrag
 
 
-QEMUOPTS = -hda $(OBJDIR)/kern/kernel -serial mon:stdio -gdb tcp::$(GDBPORT)
+QEMUOPTS = -kernel $(OBJDIR)/kern/kernel -cpu arm1176 -m 256 -M raspi -serial stdio -gdb tcp::$(GDBPORT) -D qemu.log
 IMAGES = $(OBJDIR)/kern/kernel
 
 .gdbinit: .gdbinit.tmpl
